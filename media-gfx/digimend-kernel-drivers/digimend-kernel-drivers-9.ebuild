@@ -13,9 +13,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-#MODULE_NAMES="r8168(net:${S}/src)"
-#BUILD_TARGETS="modules"
-
+MODULE_NAMES="hid-kye(extra:${S}) hid-polostar(extra:${S}) hid-uclogic(extra:${S}) hid-viewsonic(extra:${S})"
+BUILD_TARGETS="modules"
 
 #pkg_setup() {
 #	linux-mod_pkg_setup
@@ -24,5 +23,5 @@ KEYWORDS="~amd64 ~x86"
 
 #src_install() {
 #	linux-mod_src_install
-#	dodoc README
+#	dodoc README.md
 #}
