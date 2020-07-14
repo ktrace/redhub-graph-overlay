@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,15 +23,18 @@ RDEPEND="
 	dev-qt/qtsvg:5
 	dev-qt/qtwidgets:5
 	media-libs/freetype:2"
+
 DEPEND="${RDEPEND}
 	dev-qt/qthelp:5
 	dev-qt/qtxml:5
 "
-BDEPEND="dev-qt/linguist-tools:5"
+
+BDEPEND="dev-qt/linguist-tools:5
+	dev-qt/qt-creator"
 
 #S="${WORKDIR}/LibreCAD-${PV}"
 
-PATCHES=( "${FILESDIR}/${P}-qt-5.14.1.patch" )
+#PATCHES=( "${FILESDIR}/${P}-qt-5.14.1.patch" )
 
 src_configure() {
 	lrelease ts/*.ts
