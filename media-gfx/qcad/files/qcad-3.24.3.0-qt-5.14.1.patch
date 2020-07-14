@@ -1,0 +1,8 @@
+diff -Nuar qcad-3.24.3.0/src/3rdparty/qt-labs-qtscriptgenerator-5.14.1/qt-labs-qtscriptgenerator-5.14.1.pro qcad-3.24.3.0/src/3rdparty-/qt-labs-qtscriptgenerator-5.14.1/qt-labs-qtscriptgenerator-5.14.1.pro
+--- qcad-3.24.3.0/src/3rdparty/qt-labs-qtscriptgenerator-5.14.1/qt-labs-qtscriptgenerator-5.14.1.pro	1970-01-01 03:00:00.000000000 +0300
++++ qcad-3.24.3.0/src/3rdparty-/qt-labs-qtscriptgenerator-5.14.1/qt-labs-qtscriptgenerator-5.14.1.pro	2019-10-23 23:33:21.000000000 +0300
+@@ -0,0 +1,4 @@
++include( ../../../shared.pri )
++
++SUBDIRS = ../qt-labs-qtscriptgenerator-5.5.0/qtbindings
++TEMPLATE = subdirs

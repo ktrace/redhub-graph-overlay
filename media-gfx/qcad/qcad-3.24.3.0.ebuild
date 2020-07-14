@@ -24,27 +24,41 @@ RDEPEND="
 	dev-qt/qtwidgets:5
 	media-libs/freetype:2"
 DEPEND="${RDEPEND}
-	dev-qt/linguist-tools:5
 	dev-qt/qthelp:5
 	dev-qt/qtxml:5
 "
+BDEPEND="dev-qt/linguist-tools:5"
 
 #S="${WORKDIR}/LibreCAD-${PV}"
 
-PATCHES=( "${FILESDIR}/${P}-qt-5.12.5.patch" )
+PATCHES=( "${FILESDIR}/${P}-qt-5.14.1.patch" )
 
 src_configure() {
-	eqmake5 -r
+	lrelease ts/*.ts
+	eqmake5 PREFIX="${D}"/usr -r
 }
 
 src_install() {
-	dobin unix/librecad
-	use tools && dobin unix/ttf2lff
-	insinto /usr/share/${PN}
-	doins -r unix/resources/*
-	use doc && docinto html && dodoc -r librecad/support/doc/*
-	insinto /usr/share/appdata
-	doins unix/appdata/librecad.appdata.xml
-	doicon librecad/res/main/${PN}.png
-	make_desktop_entry ${PN} LibreCAD ${PN} Graphics
+#	emake INSTALL_ROOT="${D}" install
+	insinto "/usr/share/${PN}"
+	doins -r {examples,fonts,libraries,patterns,plugins,scripts,ts}
+	doins README.md
+	insinto "/usr/libexec/${PN}/"
+	doins release/*
+#	dolib.a release/*.a
+#	dolib.so release/*.so
+#	exeinto "/usr/libexec/${PN}/"
+#	doexe release/qcad-bin
+}
+
+pkg_preinst() {
+	gnome2_icon_savelist
+}
+
+pkg_postinst() {
+	gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	gnome2_icon_cache_update
 }
