@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit desktop qmake-utils
+inherit xdg-utils qmake-utils
 
 DESCRIPTION="Generic 2D CAD program"
 HOMEPAGE="https://www.qcad.org/"
@@ -16,12 +16,17 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	dev-qt/qtxmlpatterns:5
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtsvg:5
 	dev-qt/qtwidgets:5
+	dev-qt/qtxmlpatterns:5
+	qt-dev/qtconcurrent:5
+	qt-dev/qtnetwork:5
+	qt-dev/qtopengl:5
+	qt-dev/qtscript:5
+	qt-dev/qtsql:5
 	media-libs/freetype:2"
 
 DEPEND="${RDEPEND}
@@ -38,30 +43,31 @@ BDEPEND="dev-qt/linguist-tools:5
 
 src_configure() {
 	lrelease ts/*.ts
-	eqmake5 PREFIX="${D}"/usr -r
+	eqmake5 CONFIG+=ractivated
 }
 
 src_install() {
-#	emake INSTALL_ROOT="${D}" install
-	insinto "/usr/share/${PN}"
-	doins -r {examples,fonts,libraries,patterns,plugins,scripts,ts}
-	doins README.md
-	insinto "/usr/libexec/${PN}/"
-	doins release/*
-#	dolib.a release/*.a
-#	dolib.so release/*.so
+	emake INSTALL_ROOT="${D}" release
+	insinto "/usr/$(get_libdir)/${PN}"
+	doins -r {examples,fonts,patterns,ts,libraries,plugins,scripts}
+#doins README.md
+#	insinto "/usr/libexec/${PN}/"
+#	doins release/*
+	dolib.a release/*.a
+	dolib.so release/*.so
+	exeinto "/usr/$(get_libdir)"
 #	exeinto "/usr/libexec/${PN}/"
-#	doexe release/qcad-bin
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
+	doexe release/qcad-bin
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+    gnome2_icon_cache_update
+    xdg_mimeinfo_database_update
+    xdg_desktop_database_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+    gnome2_icon_cache_update
+    xdg_mimeinfo_database_update
+    xdg_desktop_database_update
 }
