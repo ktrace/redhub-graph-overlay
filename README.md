@@ -7,10 +7,13 @@ ADDED:
 - DIGImend kernel drivers
 
 TODO:
-- FreeCAD
+- gCAD3D
 - qcad
 - synfig
-- leocad
+- LeoCAD
+- vgc
+- KLayout
+
 
 How to use:
 
