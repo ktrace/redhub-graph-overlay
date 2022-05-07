@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=VPaint
+Comment=Vector graphic an animation
+Exec=vpaint %f
+Icon=vpaint
+Terminal=false
+Type=Application
+MimeType=text/plain;
+Categories=Qt;Graphics;2DGraphics;VectorGraphics;

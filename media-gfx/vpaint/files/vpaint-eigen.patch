@@ -1,0 +1,16 @@
+diff --git a/src/VAC/CMakeLists.txt b/src/VAC/CMakeLists.txt
+index 8720a44..bf1e1fd 100644
+--- a/src/VAC/CMakeLists.txt
++++ b/src/VAC/CMakeLists.txt
+@@ -208,9 +208,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Widgets Qt5::Core Qt5::Gui Qt5
+ find_package(OpenGL REQUIRED)
+ target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES})
+ 
+-find_package(Eigen3 QUIET)
+-if (Eigen3_FOUND)
+-    target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
+-else()
+-    target_include_directories(${PROJECT_NAME} PUBLIC ../Third)
+-endif()
++find_package(Eigen3 REQUIRED)
++target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
