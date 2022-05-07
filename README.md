@@ -5,6 +5,7 @@ Best ebuilds for best and most useful apps will move in main tree.
 
 ADDED:
 - DIGImend kernel drivers
+- VPaint
 
 TODO:
 - gCAD3D
@@ -12,7 +13,6 @@ TODO:
 - synfig
 - LeoCAD
 - vgc
-- KLayout
 
 
 How to use:
