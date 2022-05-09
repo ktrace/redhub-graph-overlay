@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 desktop
+inherit cmake desktop git-r3
 
 DESCRIPTION="Vector illustration and animation software. Prototype for VCG and forever BETA"
 HOMEPAGE="https://www.vpaint.org/ https://github.com/dalboris/vpaint"
@@ -13,7 +13,15 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND=""
+DEPEND="
+	dev-cpp/eigen:3
+	dev-qt/qtcore:5
+	dev-qt/qtgui:5
+	dev-qt/qtnetwork:5
+	dev-qt/qtopengl:5
+	dev-qt/qtwidgets:5
+	media-libs/glew"
+
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
