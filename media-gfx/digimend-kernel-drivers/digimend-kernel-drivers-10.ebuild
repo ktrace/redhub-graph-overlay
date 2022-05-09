@@ -1,10 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit linux-mod udev
-# eutils
 
 DESCRIPTION="UCLogic graphics tablet drivers"
 HOMEPAGE="https://github.com/DIGImend/"
@@ -21,11 +20,6 @@ RDEPEND="
 	x11-drivers/xf86-input-wacom
 	"
 DEPEND="${RDEPEND}"
-
-#pkg_setup() {
-#	linux-mod_pkg_setup
-#	BUILD_PARAMS="KERNELDIR=${KV_DIR}"
-#}
 
 src_install() {
 	linux-mod_src_install
