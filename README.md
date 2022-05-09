@@ -8,11 +8,14 @@ ADDED:
 - VPaint
 
 TODO:
-- gCAD3D
-- qcad
 - synfig
 - LeoCAD
 - vgc
+
+CANCEL PLAN:
+- gCAD3D
+- qcad
+
 
 
 How to use:
