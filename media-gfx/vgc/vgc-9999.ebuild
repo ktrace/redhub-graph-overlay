@@ -1,7 +1,7 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake-utils git-r3
 
@@ -14,15 +14,13 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-DEPEND="
+DEPEND="dev-cpp/eigen:3
+	dev-libs/libfmt
+	dev-python/pybind11
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
 	dev-qt/qtwidgets:5
-"
-# TODO:
-# Eigen from system
-# Python >3.5 deps
-# Correct Install
+	media-libs/harfbuzz"
 
 RDEPEND="${DEPEND}"
 BDEPEND=""
