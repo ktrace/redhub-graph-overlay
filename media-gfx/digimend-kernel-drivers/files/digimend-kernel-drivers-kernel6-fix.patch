@@ -1,0 +1,26 @@
+From eca6e1b701bffb80a293234a485ebf6b4bc85562 Mon Sep 17 00:00:00 2001
+From: Slava Barinov <rayslava@gmail.com>
+Date: Wed, 26 Apr 2023 12:37:02 +0300
+Subject: [PATCH] uclogic: Switch from hid_is_using_ll_driver to hid_is_usb
+
+The hid_is_using_ll_driver function was deprecated and has been removed in
+Linux 6.3
+---
+ hid-uclogic-params.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/hid-uclogic-params.c b/hid-uclogic-params.c
+index 86ea181..c408b9e 100644
+--- a/hid-uclogic-params.c
++++ b/hid-uclogic-params.c
+@@ -1223,7 +1223,9 @@ int uclogic_params_init(struct uclogic_params *params,
+ 
+ 	/* Check arguments */
+ 	if (params == NULL || hdev == NULL
+-#if KERNEL_VERSION(4, 14, 0) <= LINUX_VERSION_CODE
++#if KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE
++	    || !hid_is_usb(hdev)
++#elif KERNEL_VERSION(4, 14, 0) <= LINUX_VERSION_CODE
+ 	    || !hid_is_using_ll_driver(hdev, &usb_hid_driver)
+ #endif
+ 	   ) {

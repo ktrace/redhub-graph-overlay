@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit linux-mod udev
+inherit linux-mod-r1 udev
 
 DESCRIPTION="UCLogic graphics tablet drivers"
 HOMEPAGE="https://github.com/DIGImend/"
@@ -12,8 +12,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-MODULE_NAMES="hid-kye(extra:${S}) hid-polostar(extra:${S}) hid-uclogic(extra:${S}) hid-viewsonic(extra:${S})"
-BUILD_TARGETS="modules"
+#MODULE_NAMES="hid-kye(extra:${S}) hid-polostar(extra:${S}) hid-uclogic(extra:${S}) hid-viewsonic(extra:${S})"
+#BUILD_TARGETS="modules"
 
 RDEPEND="
 	virtual/udev
@@ -21,8 +21,10 @@ RDEPEND="
 	"
 DEPEND="${RDEPEND}"
 
+PATCHES=( "${FILESDIR}"/${PN}-kernel6-fix.patch )
+
 src_install() {
-	linux-mod_src_install
+	linux-mod-r1_src_install
 	udev_newrules udev.rules 90-digimend.rules
 	exeinto $(get_udevdir)
 	doexe hid-rebind
@@ -32,12 +34,22 @@ src_install() {
 	newins xorg.conf 50-digimend.conf
 }
 
+src_compile() {
+	local modlist=( {hid-kye,hid-polostar,hid-uclogic,hid-viewsonic}=kernel/drivers/hid )
+#	local modargs=( KSRC="${KV_OUT_DIR}" )
+	local modargs=( KERN_DIR="${KV_OUT_DIR}" KERN_VER="${KV_FULL}" )
+
+
+	linux-mod-r1_src_compile
+}
+
+
 pkg_postinst() {
 	udev_reload
-	linux-mod_pkg_postinst
+	linux-mod-r1_pkg_postinst
 }
 
 pkg_postrm() {
 	udev_reload
-	linux-mod_pkg_postrm
+	linux-mod-r1_pkg_postrm
 }
