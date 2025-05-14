@@ -1,4 +1,4 @@
-# Copyright 2022 Gentoo Authors
+# Copyright 2024-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -12,16 +12,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-#MODULE_NAMES="hid-kye(extra:${S}) hid-polostar(extra:${S}) hid-uclogic(extra:${S}) hid-viewsonic(extra:${S})"
-#BUILD_TARGETS="modules"
-
 RDEPEND="
 	virtual/udev
 	x11-drivers/xf86-input-wacom
 	"
 DEPEND="${RDEPEND}"
 
-PATCHES=( "${FILESDIR}"/${PN}-kernel6-fix.patch )
+PATCHES=( "${FILESDIR}"/${P}-kernel6.12-fix.patch )
 
 src_install() {
 	linux-mod-r1_src_install
@@ -36,13 +33,10 @@ src_install() {
 
 src_compile() {
 	local modlist=( {hid-kye,hid-polostar,hid-uclogic,hid-viewsonic}=kernel/drivers/hid )
-#	local modargs=( KSRC="${KV_OUT_DIR}" )
 	local modargs=( KERN_DIR="${KV_OUT_DIR}" KERN_VER="${KV_FULL}" )
-
 
 	linux-mod-r1_src_compile
 }
-
 
 pkg_postinst() {
 	udev_reload
