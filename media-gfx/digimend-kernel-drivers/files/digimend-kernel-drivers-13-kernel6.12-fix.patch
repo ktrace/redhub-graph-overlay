@@ -1,0 +1,155 @@
+From f3c7c7f1179fc786a8e5aad027d4db904c31b42c Mon Sep 17 00:00:00 2001
+From: Lilith <48443491+Stroopwafe1@users.noreply.github.com>
+Date: Thu, 2 Jan 2025 19:10:56 +0100
+Subject: [PATCH] Fix compile errors on Linux 6.12
+
+Upstream commit fe73965d0786 ("HID: change return type of report_fixup()
+to const") changed the return value of the report_fixup callback.
+
+Also, unaligned.h was moved from asm to linux.
+
+Fix both issues on kernels >= 6.12.
+---
+ hid-kye.c            | 7 +++++++
+ hid-polostar.c       | 6 ++++++
+ hid-uclogic-core.c   | 5 +++++
+ hid-uclogic-params.c | 7 ++++++-
+ hid-uclogic-rdesc.c  | 6 ++++++
+ hid-viewsonic.c      | 6 ++++++
+ 6 files changed, 36 insertions(+), 1 deletion(-)
+
+diff --git a/hid-kye.c b/hid-kye.c
+index 5fde67f..ac14d1a 100644
+--- a/hid-kye.c
++++ b/hid-kye.c
+@@ -18,6 +18,8 @@
+ #include <linux/hid.h>
+ #include <linux/module.h>
+ 
++#include <linux/version.h>
++
+ #include "hid-ids.h"
+ 
+ /* Original EasyPen i405X report descriptor size */
+@@ -579,8 +581,13 @@ static __u8 *kye_consumer_control_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 	return rdesc;
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ static __u8 *kye_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 		unsigned int *rsize)
++#else
++static const __u8 *kye_report_fixup(struct hid_device *hdev, __u8 *rdesc,
++		unsigned int *rsize)
++#endif
+ {
+ 	switch (hdev->product) {
+ 	case USB_DEVICE_ID_KYE_ERGO_525V:
+diff --git a/hid-polostar.c b/hid-polostar.c
+index ecbe02c..df51069 100644
+--- a/hid-polostar.c
++++ b/hid-polostar.c
+@@ -16,6 +16,7 @@
+ #include <linux/hid.h>
+ #include <linux/module.h>
+ #include <linux/usb.h>
++#include <linux/version.h>
+ 
+ #include "hid-ids.h"
+ 
+@@ -149,8 +150,13 @@ static __u8 pt1001_rdesc_fixed[] = {
+ 	0xC0,               /*  End Collection                          */
+ };
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ static __u8 *polostar_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 				   unsigned int *rsize)
++#else
++static const __u8 *polostar_report_fixup(struct hid_device *hdev, __u8 *rdesc,
++				   unsigned int *rsize)
++#endif
+ {
+ 	struct usb_interface *iface = to_usb_interface(hdev->dev.parent);
+ 	__u8 iface_num = iface->cur_altsetting->desc.bInterfaceNumber;
+diff --git a/hid-uclogic-core.c b/hid-uclogic-core.c
+index 06298ac..72680dd 100644
+--- a/hid-uclogic-core.c
++++ b/hid-uclogic-core.c
+@@ -53,8 +53,13 @@ static void uclogic_inrange_timeout(struct timer_list *t)
+ 	input_sync(input);
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ static __u8 *uclogic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
++				unsigned int *rsize)
++#else
++static const __u8 *uclogic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 					unsigned int *rsize)
++#endif
+ {
+ 	struct uclogic_drvdata *drvdata = hid_get_drvdata(hdev);
+ 
+diff --git a/hid-uclogic-params.c b/hid-uclogic-params.c
+index 7f7cc36..97f9dc6 100644
+--- a/hid-uclogic-params.c
++++ b/hid-uclogic-params.c
+@@ -19,9 +19,14 @@
+ #include "hid-ids.h"
+ #include <linux/ctype.h>
+ #include <linux/string.h>
++#include <linux/version.h>
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ #include <asm/unaligned.h>
++#else
++#include <linux/unaligned.h>
++#endif
+ 
+-#include <linux/version.h>
+ 
+ /**
+  * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
+diff --git a/hid-uclogic-rdesc.c b/hid-uclogic-rdesc.c
+index c26bfb1..c9d7230 100644
+--- a/hid-uclogic-rdesc.c
++++ b/hid-uclogic-rdesc.c
+@@ -16,7 +16,13 @@
+ 
+ #include "hid-uclogic-rdesc.h"
+ #include <linux/slab.h>
++#include <linux/version.h>
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ #include <asm/unaligned.h>
++#else
++#include <linux/unaligned.h>
++#endif
+ 
+ /* Fixed WP4030U report descriptor */
+ __u8 uclogic_rdesc_wp4030u_fixed_arr[] = {
+diff --git a/hid-viewsonic.c b/hid-viewsonic.c
+index d887ac1..0d526c3 100644
+--- a/hid-viewsonic.c
++++ b/hid-viewsonic.c
+@@ -16,6 +16,7 @@
+ #include <linux/hid.h>
+ #include <linux/module.h>
+ #include <linux/usb.h>
++#include <linux/version.h>
+ 
+ #include "hid-ids.h"
+ 
+@@ -71,8 +72,13 @@ static __u8 pd1011_rdesc_fixed[] = {
+ 	0xC0                    /*  End Collection                      */
+ };
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ static __u8 *viewsonic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 				    unsigned int *rsize)
++#else
++static const __u8 *viewsonic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
++				    unsigned int *rsize)
++#endif
+ {
+ 	switch (hdev->product) {
+ 	case USB_DEVICE_ID_VIEWSONIC_PD1011:
