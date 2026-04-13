@@ -18,7 +18,10 @@ RDEPEND="
 	"
 DEPEND="${RDEPEND}"
 
-PATCHES=( "${FILESDIR}"/${P}-kernel6.12-fix.patch )
+PATCHES=(
+	"${FILESDIR}"/${P}-kernel6.12-fix.patch
+	"${FILESDIR}"/${P}-kernel6.18-fix.patch
+	)
 
 src_install() {
 	linux-mod-r1_src_install
@@ -29,6 +32,11 @@ src_install() {
 	newins depmod.conf digimend.conf
 	insinto usr/share/X11/xorg.conf.d
 	newins xorg.conf 50-digimend.conf
+}
+
+src_prepare() {
+		sed -E -i'' -e 's/(KVERSION := ).*/\1$(KERN_VER)/g' Makefile || die 'ver patch fail'
+		default
 }
 
 src_compile() {
